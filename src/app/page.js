@@ -13,6 +13,7 @@ const page = () => {
         // Use FileSaver to save the file
         saveAs(blob, "print.png")
       })
+      .then(() => console.log("printed"))
   }
 
   useEffect(() => {

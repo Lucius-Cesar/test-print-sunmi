@@ -10,7 +10,7 @@ const page = () => {
     const blob = new Blob([textToPrint], { type: "text/plain;charset=utf-8" })
     
     // Generate a random filename
-    const randomFilename = `${Math.random().toString(36).substr(2, 9)}-${Date.now()}.png`
+    const randomFilename = `${Math.random().toString(36).substr(2, 9)}-${Date.now()}.txt`
     
     // Save the Blob as a file with the random filename
     saveAs(blob, randomFilename)

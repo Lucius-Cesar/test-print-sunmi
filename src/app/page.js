@@ -3,22 +3,24 @@ import { saveAs } from "file-saver"
 import { useEffect } from "react"
 
 const page = () => {
-  const printFileLocation = "images/test.png"
-
-  const saveAndPrintFile = () => {
-    // Fetch the file from the server
-    fetch(printFileLocation)
-      .then((response) => response.blob())
-      .then((blob) => {
-        // Use FileSaver to save the file
-        saveAs(blob, "print.png")
-      })
-      .then(() => console.log("printed"))
+  const textToPrint = "Is this the real life ?"
+  
+  const saveAndPrintText = () => {
+    // Convert text to a Blob object
+    const blob = new Blob([textToPrint], { type: "text/plain;charset=utf-8" })
+    
+    // Generate a random filename
+    const randomFilename = `${Math.random().toString(36).substr(2, 9)}-${Date.now()}.png`
+    
+    // Save the Blob as a file with the random filename
+    saveAs(blob, randomFilename)
   }
 
   useEffect(() => {
-    // Interval to trigger saveAndPrintFile every minute (60000ms)
-    const interval = setInterval(saveAndPrintFile, 60000)
+    saveAndPrintText()
+
+    // Interval to trigger saveAndPrintFile every 30 seconds (30000ms)
+    const interval = setInterval(saveAndPrintText, 30000)
 
     // Clean up interval on component unmount
     return () => clearInterval(interval)

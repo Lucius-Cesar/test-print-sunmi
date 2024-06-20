@@ -3,16 +3,29 @@ import { useRef, useEffect, useState } from "react";
 import html2canvas from 'html2canvas';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import DeliveryIcon from './ui/icons/DeliveryIcons';
+import { saveAs } from 'file-saver';
+
 
 
 const OrderPrintTicket = ({order, restaurant}) => {
 
   const componentRef = useRef(null);
+  const emptyText = ""
+  
+  const DownloadText = async(text) => {
+    // Convert text to a Blob object
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" })
+    
+    // Generate a random filename
+    const randomFilename = `${Math.random().toString(36).substr(2, 9)}-${Date.now()}.txt`
+    
+    // Save the Blob as a file with the random filename
+    saveAs(blob, randomFilename)
+  }
 
   const handleCaptureClick = async () => {
       if (!componentRef.current) return;
 
-      console.log("héhé")
 
       const canvas = await html2canvas(componentRef.current);
       const imgData = canvas.toDataURL('image/jpeg');
@@ -20,7 +33,8 @@ const OrderPrintTicket = ({order, restaurant}) => {
       const link = document.createElement('a');
       link.href = imgData;
       link.download = 'composant.jpg';
-      link.click()
+    
+      DownloadText(emptyText).then(() => setTimeout(link.click(),1000))
   };
 
   useEffect(() => {

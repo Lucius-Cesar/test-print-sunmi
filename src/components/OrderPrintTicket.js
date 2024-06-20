@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 const OrderPrintTicket = ({order, restaurant}) => {
 
   const componentRef = useRef(null);
-  const emptyText = ""
+  const emptyText = " "
   
   const DownloadText = async(text) => {
     // Convert text to a Blob object

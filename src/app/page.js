@@ -1,44 +1,28 @@
 "use client"
-import { saveAs } from "file-saver"
-import { useEffect } from "react"
+import { useRef } from 'react';
+import html2canvas from 'html2canvas';
+import OrderPrintTicket from '@/components/OrderPrintTicket';
 
-const page = () => {
-  
- 
-    const printFileLocation = "images/test.jpg"
-    const randomFilename = `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`
+const Page = () => {
+  const componentRef = useRef(null); // Assurez-vous d'initialiser useRef avec null
 
-    const saveAndPrintFile = () => {
-    fetch(printFileLocation)
-      .then((response) => response.blob())
-      .then((blob) => {
-        // Use FileSaver to save the file
-        saveAs(blob, `${randomFilename}.jpg`)
-      })
-      .then(() => console.log("printed"))
-    // Convert text to a Blob object
-    
-    // Generate a random filename
-    
-    // Save the Blob as a file with the random filename
+  const handleCaptureClick = async () => {
+    if (!componentRef.current) return;
+
+    const canvas = await html2canvas(componentRef.current);
+    const imgData = canvas.toDataURL('image/jpeg');
+
+    const link = document.createElement('a');
+    link.href = imgData;
+    link.download = 'composant.jpg';
+    link.click();
   }
-
-  useEffect(() => {
-    saveAndPrintFile()
-
-    // Interval to trigger saveAndPrintFile every 30 seconds (30000ms)
-    const interval = setInterval(saveAndPrintFile, 30000)
-
-    // Clean up interval on component unmount
-    return () => clearInterval(interval)
-  }, []) // Empty dependency array ensures it runs only on mount
 
   return (
     <div>
-      <h1>Test d'impression SUNMI</h1>
+      <OrderPrintTicket />
     </div>
-  )
-}
+  );
+};
 
-
-export default page
+export default Page;

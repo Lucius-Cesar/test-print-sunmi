@@ -20,7 +20,7 @@ const OrderPrintTicket = ({order, restaurant}) => {
       const link = document.createElement('a');
       link.href = imgData;
       link.download = 'composant.jpg';
-
+      link.click()
   };
 
   useEffect(() => {

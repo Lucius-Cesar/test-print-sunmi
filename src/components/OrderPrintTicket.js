@@ -12,18 +12,19 @@ const OrderPrintTicket = ({order, restaurant}) => {
   const handleCaptureClick = async () => {
       if (!componentRef.current) return;
 
+      console.log("héhé")
+
       const canvas = await html2canvas(componentRef.current);
       const imgData = canvas.toDataURL('image/jpeg');
 
       const link = document.createElement('a');
       link.href = imgData;
       link.download = 'composant.jpg';
-      link.click();
 
   };
 
   useEffect(() => {
-          order && restaurant && handleCaptureClick(); // Appel de handleCaptureClick seulement si alreadyDownloaded est false
+          order && restaurant && handleCaptureClick();
       
   }, []); 
 
@@ -70,27 +71,28 @@ const OrderPrintTicket = ({order, restaurant}) => {
  
       return(
         <div ref = {componentRef} className="flex flex-col items-center justify-start bg-white space-y-8 text-black w-full">
-            <div className = "flex flex flex-col  items-start space-y-2 w-full">
+            <div className = "flex flex flex-col  items-start w-full">
             <img className = "self-center" src = "images/foodswip-logo-print.png"/>
         <p className = "text-lg text-black self-center">{restaurant.address.street} {restaurant.address.postCode} {restaurant.address.city}</p>
         <p className = "text-lg font-bold self-center"> Commande #{order.orderNumber}</p>
         <p className ="text-lg self-center">{formatCreationDate(order.creationDate)}</p>
-                    
+        <div className = "flex flex-col justify-center items-center w-full ">
         {order.orderType === 0 ? <div className = "align-middle	flex flex-row  justify-center items-center self-center gap-2"><div className = "mt-8"><DeliveryIcon height = {44} width = {44} color = "black"/></div> <p className ="text-4xl font-bold self-center"> Livraison</p></div> : order.orderType === 1 ?  <div className = "flex flex-row justify-center items-center self-center gap-2 mt-2"><div className = "mt-6"><ShoppingBagIcon className = " text-black h-10 w-10"/> </div> <p className ="text-4xl font-bold self-center"> À emporter</p></div> : null}
+        </div>
         <p className = "text-4xl font-bold self-center pb-1">{formatEstimatedArrivalDate(order.estimatedArrivalDate)}</p>
 
             </div>
 
 
-            <div className = "font-semibold text-2xl border-t border-b border-black my-2 w-full pb-5">
+            <div className = "font-semibold text-2xl border-t border-b border-black w-full pb-5">
                 Liste des articles
             </div>
             <div className = "flex flex-col justify-start items-start w-full border-black">
               {order.formattedArticlesList.map(((element,i) => {
                 return(<div className =" w-full" key = {i}>
                   <p className = "text-2xl font-extrabold">{element.categoryTitle}</p>
-                  <div className = "ps-10 py-2 w-full">{element.articles.map((article,j) => {
-                    return(<div className = "py-2"key = {j}><div className = "flex flex-row justify-between text-2xl font-semibold w-full"> <div className = "flex flex-row gap-4"><p className = "font-extrabold">{article.quantity}</p> <p>X</p><div className = "flex flex-col"><p>{article.food.value}</p> {article.options.map((option, k) => {
+                  <div className = "ps-6 py-2 w-full">{element.articles.map((article,j) => {
+                    return(<div className = "py-2"key = {j}><div className = "flex flex-row justify-between text-2xl font-semibold w-full pe-2"> <div className = "flex flex-row gap-4"><p className = "font-extrabold">{article.quantity}</p> <p>X</p><div className = "flex flex-col"><p>{article.food.value}</p> {article.options.map((option, k) => {
                       let formattedOption = option.value
                       if(!option.isNeededInOrder){
                         formattedOption = ""
@@ -109,14 +111,14 @@ const OrderPrintTicket = ({order, restaurant}) => {
 
             </div>
             <div className = "w-full">
-            { order.orderType === 1 ?
-            <div className = "flex flex-row justify-between font-semibold text-2xl  border-t  border-black pb-5 w-full">
+            { order.orderType === 0 ?
+            <div className = "flex flex-row justify-between font-semibold text-2xl  border-t  border-black pb-5 w-full pe-2">
                 <p>Frais de livraison</p> <p>{order.deliveryFees} €</p>
             </div> : null
 }
 
-<div className = "flex flex-row justify-between font-semibold text-2xl border-b border-t border-black w-full pb-5">
-                <p>Montant Total</p> <p>{order.totalSum} €</p>
+<div className = "flex flex-row justify-between font-semibold text-2xl border-b border-t border-black w-full pb-5 pe-2">
+                <p  >Montant Total</p> <p>{order.totalSum} €</p>
             </div>
             </div>
        {order.note && <p>Note de commande: {order.note} </p>}
@@ -140,7 +142,7 @@ const OrderPrintTicket = ({order, restaurant}) => {
         </tr>
         <tr>
           <td class="py-2 px-4 border border-black font-normal pb-8">Numéro de téléphone</td>
-          <td class="py-2 px-4 border border-black pb-8">{order.customer.phoneNumber}</td>
+          <td class="py-2 px-4 border border-black">{order.customer.phoneNumber}</td>
         </tr>
       </tbody>
     </table>

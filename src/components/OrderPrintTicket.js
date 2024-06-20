@@ -137,7 +137,7 @@ const OrderPrintTicket = ({order, restaurant}) => {
                 <p  >Montant Total</p> <p>{order.totalSum} €</p>
             </div>
             </div>
-       {order.note && <p className ="text-xl self-start" >Note: <span className = "font-extrabold">{order.note}</span> </p>}
+       {order.note && <p className ="text-2xl self-start" >Note: <span className = "font-extrabold">{order.note}</span> </p>}
        <div className = "text-4xl font-extrabold text-center">{switchPaymentMethodLabel(order.paymentMethod)}</div>
        <table class="min-w-full bg-white border border-gray-200">
       <thead>

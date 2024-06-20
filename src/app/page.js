@@ -2,7 +2,6 @@
   import { useRef } from 'react';
   import html2canvas from 'html2canvas';
   import OrderPrintTicket from '@/components/OrderPrintTicket';
-
   const Page = () => {
     const restaurant = {
       name: "Dodopizza",
@@ -429,6 +428,7 @@
         ]
       }
     ],
+    note: "Pas de salade svp je déteste les légumes",
     paymentIntentId: "pi_3PTjUbP4PUdMZVTS0AEvYHyk",
     __v: 0
     };

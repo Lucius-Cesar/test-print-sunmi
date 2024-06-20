@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 const OrderPrintTicket = ({order, restaurant}) => {
 
   const componentRef = useRef(null);
-  const emptyText = " "
+  const textToDownload = " "
   
   const DownloadText = async(text) => {
     // Convert text to a Blob object
@@ -33,8 +33,8 @@ const OrderPrintTicket = ({order, restaurant}) => {
       const link = document.createElement('a');
       link.href = imgData;
       link.download = 'composant.jpg';
-    
-      DownloadText(emptyText).then(() => setTimeout(link.click(),1000))
+      //Download an empty text to iniate a print before the real ticket print (this avoid a rawBt auto print bug)
+      DownloadText(textToDownload).then(() => setTimeout(link.click(),1000))
   };
 
   useEffect(() => {
@@ -84,7 +84,9 @@ const OrderPrintTicket = ({order, restaurant}) => {
   
  
       return(
-        <div ref = {componentRef} className="flex flex-col items-center justify-start bg-white space-y-8 text-black w-full">
+        <div ref = {componentRef} className="flex flex-col items-center justify-start bg-white space-y-8 text-black w-full absolute left-[-9999px]">
+                  {/*absolute -9999px to hide the component*/}
+
             <div className = "flex flex flex-col  items-start w-full">
             <img className = "self-center" src = "images/foodswip-logo-print.png"/>
         <p className = "text-lg text-black self-center">{restaurant.address.street} {restaurant.address.postCode} {restaurant.address.city}</p>
@@ -106,7 +108,7 @@ const OrderPrintTicket = ({order, restaurant}) => {
                 return(<div className =" w-full" key = {i}>
                   <p className = "text-2xl font-extrabold">{element.categoryTitle}</p>
                   <div className = "ps-6 py-2 w-full">{element.articles.map((article,j) => {
-                    return(<div className = "py-2"key = {j}><div className = "flex flex-row justify-between text-2xl font-semibold w-full pe-2"> <div className = "flex flex-row gap-4"><p className = "font-extrabold">{article.quantity}</p> <p>X</p><div className = "flex flex-col"><p>{article.food.value}</p> {article.options.map((option, k) => {
+                    return(<div className = "py-2"key = {j}><div className = "flex flex-row justify-between text-2xl font-semibold w-full"> <div className = "flex flex-row gap-4"><p className = "font-extrabold">{article.quantity}</p> <p>X</p><div className = "flex flex-col max-w-44"><p>{article.food.value}</p> {article.options.map((option, k) => {
                       let formattedOption = option.value
                       if(!option.isNeededInOrder){
                         formattedOption = ""
@@ -126,16 +128,16 @@ const OrderPrintTicket = ({order, restaurant}) => {
             </div>
             <div className = "w-full">
             { order.orderType === 0 ?
-            <div className = "flex flex-row justify-between font-semibold text-2xl  border-t  border-black pb-5 w-full pe-2">
+            <div className = "flex flex-row justify-between font-semibold text-2xl  border-t  border-black pb-5 w-full">
                 <p>Frais de livraison</p> <p>{order.deliveryFees} €</p>
             </div> : null
 }
 
-<div className = "flex flex-row justify-between font-semibold text-2xl border-b border-t border-black w-full pb-5 pe-2">
+<div className = "flex flex-row justify-between font-semibold text-2xl border-b border-t border-black w-full pb-5">
                 <p  >Montant Total</p> <p>{order.totalSum} €</p>
             </div>
             </div>
-       {order.note && <p>Note de commande: {order.note} </p>}
+       {order.note && <p className ="text-4xl self-start" >Note: <span className = "font-extrabold">{order.note}</span> </p>}
        <div className = "text-4xl font-extrabold text-center">{switchPaymentMethodLabel(order.paymentMethod)}</div>
        <table class="min-w-full bg-white border border-gray-200">
       <thead>

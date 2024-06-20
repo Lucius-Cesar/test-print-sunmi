@@ -26,7 +26,7 @@ const OrderPrintTicket = ({order, restaurant}) => {
   useEffect(() => {
           order && restaurant && handleCaptureClick();
       
-  }, []); 
+  }, [order]); 
 
 
  
